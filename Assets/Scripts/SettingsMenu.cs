@@ -13,10 +13,6 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField]
     private Slider soundEffectsVolumeSlider;
 
-    private bool isPaused;
-
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -26,26 +22,13 @@ public class SettingsMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (mainMenu == null)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                if (!isPaused)
-                {
-                    Pause();
-                } else
-                {
-                    Resume();
-                }
-            }
-        }
-
         if (isActiveAndEnabled)
         {
             musicVolumeSlider.value = AudioManager.GetInstance().GetMusicVolume();
             soundEffectsVolumeSlider.value = AudioManager.GetInstance().GetSoundEffectsVolume();
         }
     }
+
 
     public void OnMusicVolumeChange()
     {
@@ -64,24 +47,8 @@ public class SettingsMenu : MonoBehaviour
             mainMenu.SetActive(true);
         } else
         {
-            Resume();
+            PauseManager.Resume();
         }
-
     }
 
-    public void Pause()
-    {
-        isPaused = true;
-        Time.timeScale = 0;
-        AudioListener.pause = true;
-        gameObject.SetActive(true);
-    }
-
-    public void Resume()
-    {
-        isPaused = false;
-        Time.timeScale = 1.0f;
-        AudioListener.pause = false;
-        gameObject.SetActive(false);
-    }
 }

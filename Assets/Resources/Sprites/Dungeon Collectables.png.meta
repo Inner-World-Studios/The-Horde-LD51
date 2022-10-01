@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -1469,6 +1469,7 @@ TextureImporter:
       Dungeon Collectables_81: -1845137145
       Dungeon Collectables_21: -620003385
       Dungeon Collectables_2: 1014829815
+      Dungeon Collectables_96: 804545024
       Dungeon Collectables_42: 1660791739
       Dungeon Collectables_70: -1323520205
       Dungeon Collectables_15: -1485072345
@@ -1485,7 +1486,6 @@ TextureImporter:
       Dungeon Collectables_51: 939923793
       Dungeon Collectables_80: -1096574153
       Dungeon Collectables_0: -798498592
-      Dungeon Collectables_96: 804545024
       Dungeon Collectables_69: 196870385
       Dungeon Collectables_23: -905292570
       Dungeon Collectables_11: 1449762154
@@ -1504,9 +1504,9 @@ TextureImporter:
       Dungeon Collectables_10: 1542810160
       Dungeon Collectables_92: -1682660393
       Dungeon Collectables_43: 204179689
+      Dungeon Collectables_52: 1978851568
       Dungeon Collectables_50: -1284475614
       Dungeon Collectables_94: -1176619752
-      Dungeon Collectables_52: 1978851568
       Dungeon Collectables_78: 1128250225
       Dungeon Collectables_89: -540135141
       Dungeon Collectables_37: 1389506563

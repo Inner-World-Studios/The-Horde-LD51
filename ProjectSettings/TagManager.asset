@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Floor Tilemap
+    uniqueID: 2447304475
+    locked: 0
+  - name: Wall Tilemap
+    uniqueID: 2829074555
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
