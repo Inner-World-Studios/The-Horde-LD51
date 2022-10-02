@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class WeaponController : MonoBehaviour
 {
     [SerializeField]
-    private GameObject arrowPrefab;
+    private ArrowController arrowPrefab;
     [SerializeField]
     private float attackTime;
     [SerializeField]
@@ -19,15 +18,18 @@ public class WeaponController : MonoBehaviour
 
     private GameObject drawnArrow;
 
-    private GameObject arrowsGroupObj;
+    private ObjectPool<PoolableObject> arrowPool;
 
-    
 
+
+    private void Awake()
+    {
+        arrowPool = new ObjectPool<PoolableObject>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, true, 5, 10);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        arrowsGroupObj = GameObject.Find("Arrows");
         drawnArrow = transform.Find("Arrow").gameObject;
     }
 
@@ -41,6 +43,31 @@ public class WeaponController : MonoBehaviour
 
     }
 
+    private PoolableObject CreatePooledItem()
+    {
+        PoolableObject poolableObject = GameObject.Instantiate(arrowPrefab, Vector3.zero, Quaternion.identity, GameObject.Find("World/Arrows").transform);
+        poolableObject.pool = arrowPool;
+        return poolableObject;
+    }
+
+    private void OnReturnedToPool(PoolableObject poolableObject)
+    {
+        poolableObject.gameObject.SetActive(false);
+    }
+
+    private void OnTakeFromPool(PoolableObject poolableObject)
+    {
+        poolableObject.OnCreate();
+        poolableObject.gameObject.SetActive(true);
+        Destroy(poolableObject.GetComponent<Joint2D>());
+        poolableObject.GetComponent<Rigidbody2D>().simulated = true;
+    }
+
+    private void OnDestroyPoolObject(PoolableObject poolableObject)
+    {
+        Destroy(poolableObject);
+    }
+
 
     public void Attack()
     {
@@ -48,12 +75,13 @@ public class WeaponController : MonoBehaviour
         {
             canAttack = false;
             lastAttackTime = Time.time;
-
-            GameObject arrow = Instantiate(arrowPrefab, drawnArrow.transform.position, drawnArrow.transform.rotation, arrowsGroupObj.transform);
+            PoolableObject arrow = arrowPool.Get();
+            arrow.transform.position = drawnArrow.transform.position;
+            arrow.transform.rotation = drawnArrow.transform.rotation;
             arrow.GetComponent<Rigidbody2D>().velocity = arrow.transform.rotation * Vector2.up * strength;
             drawnArrow.SetActive(false);
         }
-        
+
     }
 
     public bool CanAttack()
