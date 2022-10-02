@@ -15,11 +15,14 @@ public class PlayerController : MonoBehaviour
     private float rotateSpeed;
 
     private new Rigidbody2D rigidbody2D;
+
+    private WeaponController weaponController;
     
     // Start is called before the first frame update
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
+        weaponController = transform.Find("Weapon").GetComponent<WeaponController>();
     }
 
     // Update is called once per frame
@@ -55,10 +58,16 @@ public class PlayerController : MonoBehaviour
         diff.Normalize();
 
         float oldAngle = transform.rotation.eulerAngles.z;
-        float angle = (Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg) + 90;
+        float angle = (Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg) - 90;
 
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.AngleAxis(angle, Vector3.forward), Time.deltaTime * rotateSpeed);
 
+        if (Input.GetMouseButton(0))
+        {
+            weaponController.Attack();
+        }
+
     }
+
 }

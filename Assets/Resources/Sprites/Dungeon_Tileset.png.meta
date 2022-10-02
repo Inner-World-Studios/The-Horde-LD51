@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -5662,9 +5662,9 @@ TextureImporter:
       Dungeon_Tileset_13: -1454625241
       Dungeon_Tileset_21: 1974734511
       Dungeon_Tileset_98: -1485688490
+      Dungeon_Tileset_248: 2040692868
       Dungeon_Tileset_3: -354705642
       Dungeon_Tileset_53: 1241411027
-      Dungeon_Tileset_248: 2040692868
       Dungeon_Tileset_93: -1189405472
       Dungeon_Tileset_249: 1194060701
       Dungeon_Tileset_73: -662299751
@@ -5730,10 +5730,10 @@ TextureImporter:
       Dungeon_Tileset_85: -8022875
       Dungeon_Tileset_141: 1068683068
       Dungeon_Tileset_25: 205162788
-      Dungeon_Tileset_232: -1403591747
+      Dungeon_Tileset_233: 1915020507
       Dungeon_Tileset_69: -340571391
       Dungeon_Tileset_159: 411987839
-      Dungeon_Tileset_233: 1915020507
+      Dungeon_Tileset_232: -1403591747
       Dungeon_Tileset_35: 733873662
       Dungeon_Tileset_63: -1846881635
       Dungeon_Tileset_50: -1633795457
@@ -5742,10 +5742,9 @@ TextureImporter:
       Dungeon_Tileset_31: -354635216
       Dungeon_Tileset_144: 1859004787
       Dungeon_Tileset_239: -286540153
-      Dungeon_Tileset_164: 1246285557
       Dungeon_Tileset_214: 1741126519
       Dungeon_Tileset_116: 1042096798
-      Dungeon_Tileset_192: 1871696810
+      Dungeon_Tileset_164: 1246285557
       Dungeon_Tileset_178: -1570065643
       Dungeon_Tileset_188: -408272987
       Dungeon_Tileset_245: -1382575973
@@ -5753,6 +5752,7 @@ TextureImporter:
       Dungeon_Tileset_8: -1776315883
       Dungeon_Tileset_94: 15317627
       Dungeon_Tileset_43: 1952751023
+      Dungeon_Tileset_192: 1871696810
       Dungeon_Tileset_77: 326229619
       Dungeon_Tileset_87: 550709830
       Dungeon_Tileset_137: -2097377107
