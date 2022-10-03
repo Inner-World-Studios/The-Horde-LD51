@@ -15,8 +15,8 @@ public class AudioManager : MonoBehaviour
     private AudioSource musicSource;
     private List<AudioSource> soundEffectsSources = new List<AudioSource>();
 
-    private float musicVolume = 1f;
-    private float soundEffectsVolume = 1f;
+    private float musicVolume = 0.5f;
+    private float soundEffectsVolume = 0.75f;
 
 
     private  string currentMusicName;
@@ -31,7 +31,6 @@ public class AudioManager : MonoBehaviour
 
         musicSource = GetComponent<AudioSource>();
         musicSource.clip = musicTracks.First();
-        Debug.Log(musicSource.clip.name);
         SetMusicVolume(PlayerPrefs.GetFloat("musicVolume", 1f));
         SetSoundEffectVolume(PlayerPrefs.GetFloat("soundEffectsVolume", 1f));
 
@@ -76,7 +75,7 @@ public class AudioManager : MonoBehaviour
     public void Play(string name)
     {
         AudioClip clip = musicTracks.FirstOrDefault<AudioClip>(c => c.name == name);
-        if (clip != null)
+        if (clip != null && musicSource.clip.name != clip.name)
         {
             musicSource.Stop();
             musicSource.clip = clip;

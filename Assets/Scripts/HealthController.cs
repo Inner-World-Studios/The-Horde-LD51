@@ -5,9 +5,9 @@ using UnityEngine.UI;
 public class HealthController : MonoBehaviour
 {
     [SerializeField]
-    private float maxHealth;
+    public float maxHealth;
     [SerializeField]
-    private float health;
+    public float health;
     [SerializeField]
     private GameObject healthBarUI;
     [SerializeField]
@@ -21,10 +21,10 @@ public class HealthController : MonoBehaviour
 
     private float lastDamageTime;
 
-    public delegate void OnDeath();
+    public delegate void OnDeath(GameObject gameObject);
     public OnDeath onDeath;
 
-    public delegate void OnHealthChange();
+    public delegate void OnHealthChange(GameObject gameObject);
     public OnHealthChange onHealthChange;
 
     private GameObject healthBarsCanvas;
@@ -40,7 +40,7 @@ public class HealthController : MonoBehaviour
         }
         healthBarUI.transform.SetParent(healthBarsCanvas.transform);
         onHealthChange += HealthChange;
-        HealthChange();
+        HealthChange(gameObject);
 
     }
 
@@ -63,7 +63,7 @@ public class HealthController : MonoBehaviour
     public void Heal(float heal)
     {
         health = Mathf.Clamp(health + heal, 0, maxHealth);
-        onHealthChange?.Invoke();
+        onHealthChange?.Invoke(gameObject);
 
         HealTextHandler.DisplayHeal(gameObject, heal, Color.green);
     }
@@ -73,7 +73,7 @@ public class HealthController : MonoBehaviour
         if (CanReceiveDamage())
         {
             health -= damage;
-            onHealthChange?.Invoke();
+            onHealthChange?.Invoke(gameObject);
 
             if (health <= 0)
             {
@@ -100,10 +100,10 @@ public class HealthController : MonoBehaviour
         isDead = true;
         healthBarUI.SetActive(false);
 
-        onDeath?.Invoke();
+        onDeath?.Invoke(gameObject);
     }
 
-    private void HealthChange()
+    private void HealthChange(GameObject gameObject)
     {
         RectTransform bar = healthBarUI.transform.Find("Bar").GetComponent<RectTransform>();
         TextMeshProUGUI text = healthBarUI.transform.Find("HealthText").GetComponent<TextMeshProUGUI>();

@@ -45,7 +45,7 @@ public class MobController : MonoBehaviour
         }
     }
 
-    private void OnDeath()
+    private void OnDeath(GameObject gameObject)
     {
         particleSystem.Play();
         ScoreManager.AddScore(scoreValue);

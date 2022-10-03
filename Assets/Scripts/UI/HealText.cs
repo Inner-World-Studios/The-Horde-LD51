@@ -10,7 +10,7 @@ public class HealText : PoolableObject
         DOWN = -1
     }
 
-    public float textSpeed = 0.5f;
+    public float textSpeed = 500f;
 
     public Direction direction = Direction.UP;
     public CanvasGroup canvasGroup;
@@ -22,6 +22,8 @@ public class HealText : PoolableObject
     private float y;
 
     private bool isOwnerUI;
+
+    private float lastUpdateTime;
     
 
     private void Awake()
@@ -40,22 +42,27 @@ public class HealText : PoolableObject
     {
         if (!isDisable)
         {
-            canvasGroup.alpha -= 0.001f;
-            if (canvasGroup.alpha <= 0)
+            if ((Time.time - lastUpdateTime) >= 0.001f)
             {
-                Disable();
-            }
+                lastUpdateTime = Time.time;
 
-            y += textSpeed;
+                canvasGroup.alpha -= 0.002f;
+                if (canvasGroup.alpha <= 0)
+                {
+                    Disable();
+                }
+
+                y += textSpeed;
+
+                if (isOwnerUI || owner == null) {
+                    transform.position += new Vector3(0, textSpeed * (float)direction, 0);
+                }
+            }
 
             if (!isOwnerUI && owner != null)
             {
                 transform.position = Camera.main.WorldToScreenPoint(owner.transform.position);
                 transform.position += new Vector3(0, y * (float)direction, 0);
-            }
-            else
-            {
-                transform.position += new Vector3(0, textSpeed * (float)direction, 0);
             }
             transform.position += offset;
         }

@@ -12,6 +12,9 @@ public class MobSpawner : MonoBehaviour
     [SerializeField]
     private float spawnRate;
 
+    [SerializeField]
+    private bool isBoss;
+
     private float lastSpawnTime;
 
     private GameObject playerTarget;
@@ -25,7 +28,7 @@ public class MobSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CanSpawn())
+        if (!isBoss && CanSpawn())
         {
             SpawnMob();
         }
@@ -36,7 +39,7 @@ public class MobSpawner : MonoBehaviour
         return (Time.time - lastSpawnTime) >= spawnRate;
     }
 
-    private GameObject SpawnMob()
+    public GameObject SpawnMob()
     {
         float rand = Random.value;
         int index = 0;
@@ -48,7 +51,13 @@ public class MobSpawner : MonoBehaviour
         }
         GameObject mob = Instantiate(mobPrefabs[index], transform);
         mob.GetComponent<AIDestinationSetter>().target = playerTarget.transform;
-
+        if (isBoss)
+        {
+            mob.transform.localScale *= 4;
+            HealthController hc = mob.GetComponent<HealthController>();
+            hc.maxHealth *= 10;
+            hc.health *= 10;
+        }
         lastSpawnTime = Time.time;
 
         return mob;

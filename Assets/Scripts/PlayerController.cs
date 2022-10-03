@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnDeath()
+    private void OnDeath(GameObject gameObject)
     {
         particleSystem.Play();
     }

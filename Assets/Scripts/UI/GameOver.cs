@@ -34,7 +34,7 @@ public class GameOver : MonoBehaviour
     {
         GameObject.Find("Canvas/Game UI").SetActive(false);
         instance.gameoverScreen.SetActive(true);
-        string text = "Final Score:\n" + ScoreManager.GetScore();
+        string text = "Final Score:\n" + ScoreManager.GetScore().ToString("N0");
         instance.finalScoreText.GetComponent<TextMeshProUGUI>().text = text;
         Time.timeScale = 0;
     }

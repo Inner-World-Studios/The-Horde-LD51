@@ -53,9 +53,15 @@ public class ArrowController : PoolableObject
     {
         if (!isDisable && !hasHitTarget)
         {
-            hitSoundSource.Play();
+
 
             GameObject target = collision.collider.gameObject;
+            if (target.GetComponent<ArrowController>() != null)
+            {
+                return;
+            }
+
+            hitSoundSource.Play();
             if (target.tag == "Player" || target.tag == "Enemy")
             {
                 HealthController healthCon = target.GetComponent<HealthController>();

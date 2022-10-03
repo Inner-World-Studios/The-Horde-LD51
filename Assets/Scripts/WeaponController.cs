@@ -12,6 +12,8 @@ public class WeaponController : MonoBehaviour
     [SerializeField]
     private float strength;
 
+    public bool hasSplitShoot;
+
     private bool canAttack;
 
     private float lastAttackTime;
@@ -69,6 +71,15 @@ public class WeaponController : MonoBehaviour
         Destroy(poolableObject);
     }
 
+    public void SetAttackTime(float time)
+    {
+        attackTime = Mathf.Clamp(time, 0.1f, 1f);
+    }
+
+    public float GetAttackTime()
+    {
+        return attackTime;
+    }
 
     public void Attack()
     {
@@ -76,14 +87,35 @@ public class WeaponController : MonoBehaviour
         {
             canAttack = false;
             lastAttackTime = Time.time;
-            ArrowController arrow = arrowPool.Get() as ArrowController;
-            arrow.transform.position = drawnArrow.transform.position;
-            arrow.transform.rotation = drawnArrow.transform.rotation;
-            arrow.GetComponent<Rigidbody2D>().velocity = arrow.transform.rotation * Vector2.up * strength;
-            arrow.damage = strength;
+            if (hasSplitShoot)
+            {
+                SpawnArrow(new Vector3(0, 0, -15f));
+                SpawnArrow(new Vector3(0, 0, 15f));
+                SpawnArrow(Vector3.zero);
+            } else
+            {
+                SpawnArrow(Vector3.zero);
+            }
             drawnArrow.SetActive(false);
+
+            
         }
 
+    }
+
+    private ArrowController SpawnArrow(Vector3 rotation)
+    {
+        ArrowController arrow = arrowPool.Get() as ArrowController;
+        arrow.transform.position = drawnArrow.transform.position;
+        arrow.transform.rotation = drawnArrow.transform.rotation;
+        Vector3 angles = arrow.transform.rotation.eulerAngles + rotation;
+        arrow.transform.localRotation = Quaternion.Euler(angles);
+
+
+        arrow.GetComponent<Rigidbody2D>().velocity = arrow.transform.rotation * Vector2.up * strength;
+        arrow.damage = strength;
+
+        return arrow;
     }
 
     public bool CanAttack()
