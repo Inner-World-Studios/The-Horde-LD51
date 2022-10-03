@@ -19,12 +19,14 @@ public class WeaponController : MonoBehaviour
     private GameObject drawnArrow;
 
     private ObjectPool<PoolableObject> arrowPool;
+    private GameObject poolParent;
 
 
 
     private void Awake()
     {
-        arrowPool = new ObjectPool<PoolableObject>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, true, 5, 10);
+        arrowPool = new ObjectPool<PoolableObject>(CreatePooledItem, OnTakeFromPool, OnReturnedToPool, OnDestroyPoolObject, true, 10, 1000);
+        poolParent = GameObject.Find("World/Arrows");
     }
 
     // Start is called before the first frame update
@@ -45,13 +47,14 @@ public class WeaponController : MonoBehaviour
 
     private PoolableObject CreatePooledItem()
     {
-        PoolableObject poolableObject = GameObject.Instantiate(arrowPrefab, Vector3.zero, Quaternion.identity, GameObject.Find("World/Arrows").transform);
+        PoolableObject poolableObject = GameObject.Instantiate(arrowPrefab, Vector3.zero, Quaternion.identity, poolParent.transform);
         poolableObject.pool = arrowPool;
         return poolableObject;
     }
 
     private void OnReturnedToPool(PoolableObject poolableObject)
     {
+        poolableObject.gameObject.transform.SetParent(poolParent.transform);
         poolableObject.gameObject.SetActive(false);
     }
 
@@ -59,8 +62,6 @@ public class WeaponController : MonoBehaviour
     {
         poolableObject.OnCreate();
         poolableObject.gameObject.SetActive(true);
-        Destroy(poolableObject.GetComponent<Joint2D>());
-        poolableObject.GetComponent<Rigidbody2D>().simulated = true;
     }
 
     private void OnDestroyPoolObject(PoolableObject poolableObject)
@@ -75,10 +76,11 @@ public class WeaponController : MonoBehaviour
         {
             canAttack = false;
             lastAttackTime = Time.time;
-            PoolableObject arrow = arrowPool.Get();
+            ArrowController arrow = arrowPool.Get() as ArrowController;
             arrow.transform.position = drawnArrow.transform.position;
             arrow.transform.rotation = drawnArrow.transform.rotation;
             arrow.GetComponent<Rigidbody2D>().velocity = arrow.transform.rotation * Vector2.up * strength;
+            arrow.damage = strength;
             drawnArrow.SetActive(false);
         }
 

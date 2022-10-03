@@ -16,13 +16,18 @@ public class PlayerController : MonoBehaviour
 
     private new Rigidbody2D rigidbody2D;
 
+    private new ParticleSystem particleSystem;
     private WeaponController weaponController;
+    private HealthController healthController;
     
     // Start is called before the first frame update
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
+        particleSystem = GetComponent<ParticleSystem>();
         weaponController = transform.Find("Weapon").GetComponent<WeaponController>();
+        healthController = GetComponent<HealthController>();
+        healthController.onDeath += OnDeath;
     }
 
     // Update is called once per frame
@@ -34,13 +39,17 @@ public class PlayerController : MonoBehaviour
     {
         if (!PauseManager.IsPaused())
         {
-            HandleInput();
+            if (!healthController.IsDead())
+            {
+                HandleInput();
+            } else if (!particleSystem.isEmitting) {
+                GameOver.DisplayGameover();
+            }
         }
     }
 
     void HandleInput()
     {
-
         //handle player movement
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -67,7 +76,10 @@ public class PlayerController : MonoBehaviour
         {
             weaponController.Attack();
         }
-
     }
 
+    private void OnDeath()
+    {
+        particleSystem.Play();
+    }
 }

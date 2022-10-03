@@ -7,20 +7,27 @@ public class ArrowController : PoolableObject
     public float lifetime = 5f;
     public float damage = 1f;
 
-    new ParticleSystem particleSystem;
+    private new ParticleSystem particleSystem;
+    private AudioSource hitSoundSource;
 
     private float spawnTime;
     private bool hasHitTarget;
 
+
     private void Awake()
     {
         particleSystem = GetComponent<ParticleSystem>();
+        hitSoundSource = GetComponent<AudioSource>();
+        AudioManager.GetInstance().AddSoundEffectSource(hitSoundSource);
     }
 
     public override void OnCreate()
     {
         base.OnCreate();
         spawnTime = Time.time;
+        hasHitTarget = false;
+        GetComponent<Collider2D>().enabled = true;
+        GetComponent<Rigidbody2D>().simulated = true;
     }
 
     // Start is called before the first frame update
@@ -35,27 +42,31 @@ public class ArrowController : PoolableObject
         if ((Time.time - spawnTime) >= lifetime) {
             Disable();
         }
+
+        if (!isDisable && hasHitTarget && transform.parent == null)
+        {
+            Disable();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!isDisable)
+        if (!isDisable && !hasHitTarget)
         {
+            hitSoundSource.Play();
+
             GameObject target = collision.collider.gameObject;
             if (target.tag == "Player" || target.tag == "Enemy")
             {
                 HealthController healthCon = target.GetComponent<HealthController>();
                 if (target != null)
                 {
-                    FixedJoint2D joint = gameObject.AddComponent<FixedJoint2D>();
-                    joint.connectedBody = target.GetComponent<Rigidbody2D>();
-                    joint.anchor = collision.contacts[0].point;
-
-                    //transform.parent = target.transform;
-
+                    GetComponent<Collider2D>().enabled = false;
                     GetComponent<Rigidbody2D>().simulated = false;
 
-                    healthCon.Damage(Random.Range(1, 31));
+                    transform.SetParent(target.transform);
+
+                    healthCon.Damage(Random.Range(1, 10) * damage);
                     particleSystem.Play();
 
                 }
@@ -66,6 +77,11 @@ public class ArrowController : PoolableObject
                 Disable();
             }
         }
+    }
+
+    public void OnDestroy()
+    {
+        AudioManager.GetInstance().RemoveSoundEffectSource(hitSoundSource);
     }
 
 }

@@ -6,18 +6,20 @@ public class HealthController : MonoBehaviour
 {
     [SerializeField]
     private float maxHealth;
-
     [SerializeField]
     private float health;
-
     [SerializeField]
     private GameObject healthBarUI;
-
     [SerializeField]
     private bool healthBarTrack;
-
     [SerializeField]
     private Vector3 healthBarPositionOffset;
+    [SerializeField]
+    private bool hasImmunityFrames;
+    [SerializeField]
+    private float immunityFrameTime;
+
+    private float lastDamageTime;
 
     public delegate void OnDeath();
     public OnDeath onDeath;
@@ -27,14 +29,16 @@ public class HealthController : MonoBehaviour
 
     private GameObject healthBarsCanvas;
 
+    private bool isDead;
+
     private void Awake()
     {
-        healthBarsCanvas = GameObject.Find("Canvas/HealthBars");
+        healthBarsCanvas = GameObject.Find("Canvas/Game UI/HealthBars");
         if (Utilities.IsPrefab(healthBarUI))
         {
             healthBarUI = GameObject.Instantiate(healthBarUI, healthBarsCanvas.transform);
         }
-        healthBarUI.transform.parent = healthBarsCanvas.transform;
+        healthBarUI.transform.SetParent(healthBarsCanvas.transform);
         onHealthChange += HealthChange;
         HealthChange();
 
@@ -61,20 +65,42 @@ public class HealthController : MonoBehaviour
         health = Mathf.Clamp(health + heal, 0, maxHealth);
         onHealthChange?.Invoke();
 
-        HealTextHandler.DisplayHeal(transform, heal, Color.green);
+        HealTextHandler.DisplayHeal(gameObject, heal, Color.green);
     }
 
     public void Damage(float damage)
     {
-        health -= damage;
-        onHealthChange?.Invoke();
-
-        if (health < 0)
+        if (CanReceiveDamage())
         {
-            onDeath?.Invoke();
-        }
+            health -= damage;
+            onHealthChange?.Invoke();
 
-        HealTextHandler.DisplayHeal(transform, -damage, Color.red);
+            if (health <= 0)
+            {
+                Death();
+            }
+
+            HealTextHandler.DisplayHeal(gameObject, -damage, Color.red);
+        }
+    }
+
+    public bool IsDead()
+    {
+        return isDead;
+    }
+
+    public bool CanReceiveDamage()
+    {
+        return !hasImmunityFrames || (Time.time - lastDamageTime) > immunityFrameTime;
+    }
+
+
+    private void Death()
+    {
+        isDead = true;
+        healthBarUI.SetActive(false);
+
+        onDeath?.Invoke();
     }
 
     private void HealthChange()

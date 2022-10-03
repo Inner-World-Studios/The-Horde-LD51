@@ -10,9 +10,8 @@ public class AudioManager : MonoBehaviour
     private static AudioManager instance;
 
     [SerializeField]
-    private List<string> musicTrackNames;
+    private List<AudioClip> musicTracks;
 
-    private Dictionary<string, AudioClip> musicTracks = new Dictionary<string, AudioClip>();
     private AudioSource musicSource;
     private List<AudioSource> soundEffectsSources = new List<AudioSource>();
 
@@ -30,14 +29,9 @@ public class AudioManager : MonoBehaviour
     {
         instance = this;
 
-        foreach (string name in musicTrackNames)
-        {
-            AddMusicTrack(name);
-        }
-
         musicSource = GetComponent<AudioSource>();
-        musicSource.clip = musicTracks.First().Value;
-
+        musicSource.clip = musicTracks.First();
+        Debug.Log(musicSource.clip.name);
         SetMusicVolume(PlayerPrefs.GetFloat("musicVolume", 1f));
         SetSoundEffectVolume(PlayerPrefs.GetFloat("soundEffectsVolume", 1f));
 
@@ -78,47 +72,14 @@ public class AudioManager : MonoBehaviour
         return soundEffectsVolume;
     }
 
-    public void AddMusicTrack(string key)
-    {
-        AudioClip clip = Resources.Load<AudioClip>(key);
-        musicTracks.Add(name, clip);
-    }
-
-    public void AddMusicTrack(string key, AudioClip musicTrack)
-    {
-        musicTrackNames.Add(key);
-        musicTracks.Add(key, musicTrack);
-    }
-
-    public void RemoveMusicTrack(string key)
-    {
-        if (key == currentMusicName)
-        {
-            musicSource.Stop();
-        }
-        if (musicTrackNames.Contains(key))
-        {
-            musicTracks[key].UnloadAudioData();
-        }
-        musicTracks.Remove(key);
-        musicTrackNames.Remove(key);
-    }
-
-    public void RemoveMusicTrack(AudioClip audioClip)
-    {
-        KeyValuePair<string, AudioClip> searchSource = musicTracks.FirstOrDefault(s => s.Value == audioClip);
-        if (!searchSource.Equals(default(KeyValuePair<string, AudioClip>)))
-        {
-            RemoveMusicTrack(searchSource.Key);
-        }
-    }
 
     public void Play(string name)
     {
-        if (musicTracks.ContainsKey(name))
+        AudioClip clip = musicTracks.FirstOrDefault<AudioClip>(c => c.name == name);
+        if (clip != null)
         {
             musicSource.Stop();
-            musicSource.clip = musicTracks[name];
+            musicSource.clip = clip;
             musicSource.Play();
 
         }
@@ -133,7 +94,7 @@ public class AudioManager : MonoBehaviour
 
     public void AddSoundEffectSource(AudioSource audioSource)
     {
-        audioSource.volume = musicVolume;
+        audioSource.volume = soundEffectsVolume;
         soundEffectsSources.Add(audioSource);
     }
 

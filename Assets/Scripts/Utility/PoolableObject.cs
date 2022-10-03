@@ -4,6 +4,7 @@ using UnityEngine.Pool;
 public class PoolableObject : MonoBehaviour
 {
     public ObjectPool<PoolableObject> pool;
+
     protected bool isDisable;
 
     public virtual void OnCreate()

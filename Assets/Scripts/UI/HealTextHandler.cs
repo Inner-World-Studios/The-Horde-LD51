@@ -52,12 +52,17 @@ public class HealTextHandler : MonoBehaviour
         Destroy(poolableObject);
     }
 
-    public static void DisplayHeal(Transform owner, float heal)
+    public static void DisplayHeal(GameObject owner, float heal)
     {
         DisplayHeal(owner, heal, Color.white);
     }
 
-    public static void DisplayHeal(Transform owner, float heal, Color color)
+    public static void DisplayHeal(GameObject owner, float heal, Color color)
+    {
+        DisplayHeal(owner, heal, color, Vector3.zero, HealText.Direction.UP);
+    }
+
+    public static void DisplayHeal(GameObject owner, float heal, Color color, Vector3 offset, HealText.Direction direction)
     {
         PoolableObject poolableObject = instance.healTextPool.Get();
         if (poolableObject != null)
@@ -65,9 +70,9 @@ public class HealTextHandler : MonoBehaviour
             HealText healText = poolableObject.GetComponent<HealText>();
             healText.transform.SetParent(instance.transform);
             healText.SetOwner(owner);
-            healText.transform.position = Camera.main.WorldToScreenPoint(owner.position);
             healText.text.SetText(heal.ToString("N0"));
             healText.text.color = color;
+            healText.direction = direction;
         }
     }
 
