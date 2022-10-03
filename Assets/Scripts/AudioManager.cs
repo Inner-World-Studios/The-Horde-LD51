@@ -10,7 +10,7 @@ public class AudioManager : MonoBehaviour
     private static AudioManager instance;
 
     [SerializeField]
-    private List<AudioClip> musicTracks;
+    private List<AudioClip> musicTracks = new List<AudioClip>();
 
     private AudioSource musicSource;
     private List<AudioSource> soundEffectsSources = new List<AudioSource>();
@@ -30,11 +30,15 @@ public class AudioManager : MonoBehaviour
         instance = this;
 
         musicSource = GetComponent<AudioSource>();
-        musicSource.clip = musicTracks.First();
+
         SetMusicVolume(PlayerPrefs.GetFloat("musicVolume", 1f));
         SetSoundEffectVolume(PlayerPrefs.GetFloat("soundEffectsVolume", 1f));
 
-        musicSource.Play();
+        if (musicTracks.Count != 0)
+        {
+            musicSource.clip = musicTracks.First();
+            musicSource.Play();
+        }
     }
 
     void Update()
