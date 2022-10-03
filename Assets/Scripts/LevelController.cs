@@ -40,8 +40,6 @@ public class LevelController : MonoBehaviour
     private CanvasGroup notificationCanvasGroup;
     private TextMeshProUGUI notificationText;
 
-    private float lastUpdateTime;
-
 
     // Start is called before the first frame update
     void Start()
@@ -65,11 +63,8 @@ public class LevelController : MonoBehaviour
             LevelEvent();
         }
 
-        if ((Time.time - lastUpdateTime) >= 0.001f)
-        {
-            lastUpdateTime = Time.time;
-            notificationCanvasGroup.alpha -= 0.0005f;
-        }
+        notificationCanvasGroup.alpha -= 0.2f * Time.deltaTime;
+        
     }
 
     public void LevelEvent()

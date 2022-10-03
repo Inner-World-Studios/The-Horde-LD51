@@ -133261,8 +133261,8 @@ MonoBehaviour:
   healthBarUI: {fileID: 474651790}
   healthBarTrack: 0
   healthBarPositionOffset: {x: 0, y: 0, z: 0}
-  hasImmunityFrames: 0
-  immunityFrameTime: 0
+  hasImmunityFrames: 1
+  immunityFrameTime: 0.2
 --- !u!198 &1529589225
 ParticleSystem:
   m_ObjectHideFlags: 0

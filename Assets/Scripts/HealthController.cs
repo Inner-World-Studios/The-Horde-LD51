@@ -72,6 +72,7 @@ public class HealthController : MonoBehaviour
     {
         if (CanReceiveDamage())
         {
+            lastDamageTime = Time.time;
             health -= damage;
             onHealthChange?.Invoke(gameObject);
 
