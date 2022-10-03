@@ -51,7 +51,7 @@ public class ArrowController : PoolableObject
                     joint.connectedBody = target.GetComponent<Rigidbody2D>();
                     joint.anchor = collision.contacts[0].point;
 
-                    transform.parent = target.transform;
+                    //transform.parent = target.transform;
 
                     GetComponent<Rigidbody2D>().simulated = false;
 
